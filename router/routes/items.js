@@ -14,9 +14,8 @@ router.get('/', function(req, res) {
     {barcode: 'ITEM00004', category: '3', name: '护肤１', price: 101, unit: '件'},
     {barcode: 'ITEM00005', category: '4', name: '用品１', price: 11, unit: '件'}
   ];
-  client.set('itemList',JSON.stringify(itemList));
-  client.get('itemList',function (err, reply) {
-    console.log(reply);
+  client.set('data',JSON.stringify(itemList));
+  client.get('data',function (err, reply) {
     res.send(JSON.parse(reply));
   });
 });
