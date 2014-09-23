@@ -31,14 +31,27 @@ router.post('/', function (req, res) {
   });
 });
 
-//
-//router.delete('/', function (req, res) {
-//  var categoryList = req.body.categoryList;
-//  client.set('categoryList', categoryList, function (err, reply) {
-//    res.send(reply);
-//  });
-//});
-//
+router.delete('/:id',function(req,res){
+  client.get('categoryList',function(err,reply){
+
+    var categoryList = JSON.parse(reply);
+    var result = _.find(categoryList,function(category){
+
+      return category.id === req.params.id;
+    });
+
+    categoryList.splice(req.params.id, 1);
+    categoryList = _.without(categoryList,result);
+
+    client.set('categoryList',JSON.stringify(categoryList),function(err, reply){
+          res.send(reply);
+        });
+
+    });
+  });
+
+
+
 //router.get('/:id', function (req, res) {
 //var categoryList = req.params.categoryList;
 //  client.get('categoryList',function (err, reply) {
