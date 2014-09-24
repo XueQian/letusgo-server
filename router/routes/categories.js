@@ -14,7 +14,7 @@ var categories= [
   {id: 4, name: '母婴用品'}
 ];
 
-
+client.set('categoryList',JSON.stringify(categories));
 router.get('/', function(req, res) {
 
 
@@ -27,17 +27,18 @@ router.post('/', function (req, res) {
   var categoryList = req.body.categoryList||categories;
 
   client.set('categoryList', JSON.stringify(categoryList), function (err, reply) {
-    res.send(reply);
+    res.send(categoryList);
   });
 });
 
 router.delete('/:id',function(req,res){
   client.get('categoryList',function(err,reply){
 
+    var id =parseInt(req.params.id) ;
     var categoryList = JSON.parse(reply);
     var result = _.find(categoryList,function(category){
 
-      return category.id === req.params.id;
+      return category.id === id;
     });
 
     categoryList.splice(req.params.id, 1);
@@ -51,6 +52,23 @@ router.delete('/:id',function(req,res){
   });
 
 
+router.put('/:id', function(req, res) {
+
+  var newCategory = req.param('categoryList');
+  var id =parseInt(req.params.id) ;
+
+  client.get('categoryList',function(err,data){
+    var categoryList = JSON.parse(data);
+    _.find(categoryList,function(category,index){
+      if(category.id === id){
+        categories[index] = newCategory;
+      }
+    });
+    client.set('categoryList',JSON.stringify(categoryList),function(err,obj){
+      res.send(obj);
+    });
+  });
+});
 
 //router.get('/:id', function (req, res) {
 //var categoryList = req.params.categoryList;
