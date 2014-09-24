@@ -28,7 +28,7 @@ router.post('/', function (req, res) {
   var itemList = req.body.itemList||items;
 console.log(itemList);
   client.set('itemList',JSON.stringify(itemList) , function (err, reply) {
-    res.send(reply);
+    res.send(itemList);
   });
 });
 
