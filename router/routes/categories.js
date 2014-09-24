@@ -54,18 +54,21 @@ router.delete('/:id',function(req,res){
 
 router.put('/:id', function(req, res) {
 
-  var newCategory = req.param('categoryList');
+  var newCategory = req.param('category');
   var id =parseInt(req.params.id) ;
 
-  client.get('categoryList',function(err,data){
-    var categoryList = JSON.parse(data);
-    _.find(categoryList,function(category,index){
-      if(category.id === id){
-        categories[index] = newCategory;
+  client.get('categoryList',function(err,reply){
+    var categoryList = JSON.parse(reply);
+
+    _.forEach(categoryList, function (category, index) {
+
+      if (category.id === id) {
+
+        categoryList[index] = newCategory;
       }
     });
-    client.set('categoryList',JSON.stringify(categoryList),function(err,obj){
-      res.send(obj);
+    client.set('categoryList',JSON.stringify(categoryList),function(err,reply){
+      res.send(categoryList);
     });
   });
 });
