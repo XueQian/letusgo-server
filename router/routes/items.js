@@ -41,7 +41,6 @@ router.delete('/:id',function(req,res){
 
       return item.id === req.params.id;
     });
-
     itemList.splice(req.params.id, 1);
     itemList = _.without(itemList,result);
 
@@ -52,5 +51,24 @@ router.delete('/:id',function(req,res){
   });
 });
 
+router.put('/:id',function(req,res){
+  var newItem = req.body.item;
+  client.get('itemList',function(err,reply){
+    var itemList = JSON.parse(reply);
+
+     var result = _.find(itemList,function(item){
+      return item.id === req.params.id;
+    });
+
+    result = newItem;
+
+    itemList.push(result);
+
+    client.set('itemList',JSON.stringify(itemList),function(err,reply){
+      res.send(reply);
+    });
+  });
+
+});
 
 module.exports = router;
