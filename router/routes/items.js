@@ -51,21 +51,24 @@ router.delete('/:id',function(req,res){
   });
 });
 
-router.put('/:id',function(req,res){
-  var newItem = req.body.item;
+router.put('/:id', function(req, res) {
+
+  var newItem = req.param('item');
+  var id =parseInt(req.params.id) ;
+
   client.get('itemList',function(err,reply){
     var itemList = JSON.parse(reply);
-     var result = _.find(itemList,function(item){
-      return item.id === req.params.id;
-    });
-    result = newItem;
-    itemList.push(result);
 
+    _.forEach(itemList, function (item, index) {
+
+      if (item.id === id) {
+
+        itemList[index] = newItem;
+      }
+    });
     client.set('itemList',JSON.stringify(itemList),function(err,reply){
       res.send(itemList);
     });
   });
-
 });
-
 module.exports = router;
