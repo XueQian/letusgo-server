@@ -45,11 +45,4 @@ router.put('/:id', function (req, res) {
 
 });
 
-router.delete('/', function (req, res) {
-
-  client.del('cartItems', function (err, reply) {
-    res.send(reply);
-  });
-});
-
 module.exports = router;
