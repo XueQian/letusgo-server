@@ -6,7 +6,7 @@ var client = redis.createClient();
 
 var _ = require('lodash');
 
-var categories= [
+var categories = [
   {id: 0, name: '服装鞋包'},
   {id: 1, name: '手机数码'},
   {id: 2, name: '全球美食'},
@@ -14,50 +14,50 @@ var categories= [
   {id: 4, name: '母婴用品'}
 ];
 
-client.set('categoryList',JSON.stringify(categories));
-router.get('/', function(req, res) {
+client.set('categoryList', JSON.stringify(categories));
+router.get('/', function (req, res) {
 
 
-  client.get('categoryList',function (err, reply) {
+  client.get('categoryList', function (err, reply) {
     res.send(reply);
   });
 });
 
 router.post('/', function (req, res) {
-  var categoryList = req.body.categoryList||categories;
+  var categoryList = req.body.categoryList || categories;
 
   client.set('categoryList', JSON.stringify(categoryList), function (err, reply) {
     res.send(categoryList);
   });
 });
 
-router.delete('/:id',function(req,res){
-  client.get('categoryList',function(err,reply){
+router.delete('/:id', function (req, res) {
+  client.get('categoryList', function (err, reply) {
 
-    var id =parseInt(req.params.id) ;
+    var id = parseInt(req.params.id);
     var categoryList = JSON.parse(reply);
-    var result = _.find(categoryList,function(category){
+    var result = _.find(categoryList, function (category) {
 
       return category.id === id;
     });
 
     categoryList.splice(req.params.id, 1);
-    categoryList = _.without(categoryList,result);
+    categoryList = _.without(categoryList, result);
 
-    client.set('categoryList',JSON.stringify(categoryList),function(err, reply){
-          res.send(reply);
-        });
-
+    client.set('categoryList', JSON.stringify(categoryList), function (err, reply) {
+      res.send(reply);
     });
+
   });
+});
 
 
-router.put('/:id', function(req, res) {
+router.put('/:id', function (req, res) {
 
   var newCategory = req.param('category');
-  var id =parseInt(req.params.id) ;
+  var id = parseInt(req.params.id);
 
-  client.get('categoryList',function(err,reply){
+  client.get('categoryList', function (err, reply) {
     var categoryList = JSON.parse(reply);
 
     _.forEach(categoryList, function (category, index) {
@@ -67,7 +67,7 @@ router.put('/:id', function(req, res) {
         categoryList[index] = newCategory;
       }
     });
-    client.set('categoryList',JSON.stringify(categoryList),function(err,reply){
+    client.set('categoryList', JSON.stringify(categoryList), function (err, reply) {
       res.send(categoryList);
     });
   });
