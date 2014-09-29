@@ -71,4 +71,17 @@ router.put('/:id', function (req, res) {
     });
   });
 });
+
+router.get('/:id', function (req, res) {
+
+  var id = req.params.id;
+  client.get('itemList',function (err, reply) {
+    var itemList = JSON.parse(reply);
+    var result = _.find(itemList,function(item){
+      return item.id === parseInt(id) ;
+    });
+    res.send(result);
+  });
+});
+
 module.exports = router;

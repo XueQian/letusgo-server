@@ -73,15 +73,16 @@ router.put('/:id', function (req, res) {
   });
 });
 
-//router.get('/:id', function (req, res) {
-//var categoryList = req.params.categoryList;
-//  client.get('categoryList',function (err, reply) {
-//    var categoryList = JSON.parse(reply);
-//    var result = _.find(categoryList,function(category){
-//      return category.id == req.params.id;
-//    });
-//    res.send(result);
-//  });
-//});
+router.get('/:id', function (req, res) {
+
+  var id = req.params.id;
+  client.get('categoryList',function (err, reply) {
+    var categoryList = JSON.parse(reply);
+    var result = _.find(categoryList,function(category){
+      return category.id === parseInt(id) ;
+    });
+    res.send(result);
+  });
+});
 
 module.exports = router;
