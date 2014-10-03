@@ -9,7 +9,7 @@ var _ = require('lodash');
 router.get('/', function (req, res) {
 
   client.get('cartItems', function (err, reply) {
-    res.send(reply);
+    res.send(reply||[]);
   });
 
 });
